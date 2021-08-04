@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ImgPage</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style>
+        .col {
+            display: inline-block;
+            width: 49%;
+        }
+        .quality {
+            width: 120px;
+            margin-left: 200px;
+        }
+    </style>
+</head>
+<body>
+<h1>Canvas Compressor</h1>
+<div id="container">
+    <div class="col">
+        <h3>
+            原图:
+        </h3>
+        <canvas id="canvas"></canvas>
+    </div>
+    <div class="col">
+        <h3>新图以0.92图片质量压缩: </h3>
+        <img id="preview" src="">
+    </div>
+    <div class="col">
+        <h3>新图裁剪: </h3>
+        <img id="preview2" src="">
+    </div>
+    <div class="col">
+        <h3>新图马赛克: </h3>
+        <img id="preview3" src="">
+    </div>
+    <img id="source" src="" style="display: none;">
+</div>
+
+<script>
+    var canvas = document.getElementById('canvas');
+    var source = document.getElementById('source');
+    var preview = document.getElementById('preview');
+
+    source.src = './src/images/testImg_2.jpg';
+
+    source.onload = function() {
+        let width = source.width;
+        let height = source.height;
+        let context = canvas.getContext('2d');
+        canvas.width = width;
+        canvas.height = height;
+        let sx = 0;
+        let sy = 0;
+        let sWidth = width;
+        let sHeight = height;
+        let dx = 0;
+        let dy = 0;
+        let dWidth = width;
+        let dHeight = height;
+        let beginX=0,beginY=0,endX=0,endY=0;
+        let tag='';
+        canvas.context.drawImage(source, 0, 0);
+        canvas.contect.save();
+        canvas.addEventListener('mousedown', e => {
+            beginX = e.offsetX;
+            beginY = e.offsetY;
+            self.canvas.addEventListener('mouseup', e => {
+                endX = e.offsetX;
+                endY = e.offsetY;
+                //马赛克
+                let dataUrl2= canvas.makeGrid(beginX, beginY, endX - beginX, endY - beginY);
+                preview2.src = dataUrl2;
+                //裁剪
+                let dataUrl3= canvas.context.drawImage(Img, beginX, beginY, endX - beginX, endY - beginY, 0, 0, endX - beginX, endY - beginY);
+                preview.src3 = dataUrl3;
+            })
+        })
+        context.drawImage(source, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        let dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+        // console.log(dataUrl);
+        preview.src = dataUrl;
+    };
+
+</script>
+</body>
+</html>
